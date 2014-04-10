@@ -11,14 +11,18 @@ import com.androidplot.Plot;
 import com.androidplot.ui.SizeLayoutType;
 import com.androidplot.ui.XLayoutStyle;
 import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.PointLabelFormatter;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
+import com.androidplot.xy.XYSeriesFormatter;
 import com.androidplot.xy.XYStepMode;
+import com.bitalino.opensignals.R;
+import com.bitalino.opensignals.model.Port;
 
 import java.text.DecimalFormat;
 
-import com.bitalino.opensignals.R;
-import com.bitalino.opensignals.model.Port;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
@@ -34,40 +38,22 @@ public class PortPageFragment extends RoboFragment {
   // The port entity associated with this fragment
   private Port port;
 
+  private XYSeries serie;
+
   @InjectView(R.id.label_port_description)
   private TextView labelPortDescription;
 
   @InjectView(R.id.dynamicPlot)
   private XYPlot plotReadings;
 
-  /**
-   * Use this factory method to create a new instance of
-   * this fragment using the provided parameters.
-   *
-   * @param port the port that this fragment will display.
-   * @return A new instance of fragment PortPageFragment.
-   */
-  public static PortPageFragment newInstance(Port port) {
-    PortPageFragment fragment = new PortPageFragment();
-    Bundle args = new Bundle();
-    args.putParcelable(ARG_PORT, port);
-    fragment.setArguments(args);
-    return fragment;
-  }
-
-  /**
-   * Instantiates a new readings pagefragment.
-   */
-  public PortPageFragment() {
-    // Required empty public constructor
+  public PortPageFragment(Port port, XYSeries serie) {
+    this.port = port;
+    this.serie = serie;
   }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-      port = getArguments().getParcelable(ARG_PORT);
-    }
   }
 
   @Override
@@ -82,6 +68,10 @@ public class PortPageFragment extends RoboFragment {
     super.onViewCreated(view, savedInstanceState);
 
     labelPortDescription.setText(getString(R.string.label_port_description, port.getName(), port.getUnit()));
+
+    LineAndPointFormatter format = new LineAndPointFormatter();
+    format.setPointLabelFormatter(new PointLabelFormatter());
+    plotReadings.addSeries(serie, format);
 
     setupGraphWidget();
     setupDomainWidget();

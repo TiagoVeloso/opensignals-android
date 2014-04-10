@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.androidplot.xy.XYSeries;
 import com.bitalino.comm.BITalinoDevice;
 import com.bitalino.comm.BITalinoException;
 import com.bitalino.comm.BITalinoFrame;
@@ -23,6 +24,7 @@ import com.bitalino.opensignals.model.Port;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,6 +62,8 @@ public class ValuesActivity extends RoboFragmentActivity {
 
   private ReadBITalinoAsyncTask task = new ReadBITalinoAsyncTask();
 
+  private List<XYSeries> series;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -68,7 +72,8 @@ public class ValuesActivity extends RoboFragmentActivity {
     if (intent != null) {
       macAddress = intent.getExtras().getString(MainActivity.EXTRA_MACADDRESS);
       final List<Port> ports = intent.getParcelableArrayListExtra(MainActivity.EXTRA_PORTS);
-      portPager.setAdapter(new PortViewPagerAdapter(this, getSupportFragmentManager(), ports));
+      series = new ArrayList<>(ports.size());
+      portPager.setAdapter(new PortViewPagerAdapter(this, getSupportFragmentManager(), ports, series));
     } else {
       throw new IllegalStateException("This activity needs to be started from an intent.");
     }
@@ -183,7 +188,5 @@ public class ValuesActivity extends RoboFragmentActivity {
         // ignore it
       }
     }
-
-
   }
 }
