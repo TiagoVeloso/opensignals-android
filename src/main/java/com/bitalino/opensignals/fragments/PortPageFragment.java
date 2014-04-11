@@ -23,6 +23,7 @@ import com.bitalino.opensignals.model.Port;
 
 import java.text.DecimalFormat;
 
+import roboguice.RoboGuice;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
@@ -37,7 +38,6 @@ public class PortPageFragment extends RoboFragment {
 
   // The port entity associated with this fragment
   private Port port;
-
   private XYSeries serie;
 
   @InjectView(R.id.label_port_description)
@@ -49,6 +49,7 @@ public class PortPageFragment extends RoboFragment {
   public PortPageFragment(Port port, XYSeries serie) {
     this.port = port;
     this.serie = serie;
+    RoboGuice.getInjector(getActivity()).injectViewMembers(this);
   }
 
   @Override

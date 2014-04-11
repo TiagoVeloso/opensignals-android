@@ -73,6 +73,8 @@ public class ValuesActivity extends RoboFragmentActivity {
       macAddress = intent.getExtras().getString(MainActivity.EXTRA_MACADDRESS);
       final List<Port> ports = intent.getParcelableArrayListExtra(MainActivity.EXTRA_PORTS);
       series = new ArrayList<>(ports.size());
+      // TODO: add series here
+
       portPager.setAdapter(new PortViewPagerAdapter(this, getSupportFragmentManager(), ports, series));
     } else {
       throw new IllegalStateException("This activity needs to be started from an intent.");
